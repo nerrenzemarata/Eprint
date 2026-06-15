@@ -4,11 +4,12 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Login page is always accessible
-  if (pathname.startsWith('/login')) return NextResponse.next();
+  if (pathname.startsWith('/login') || pathname.startsWith('/setup') || pathname.startsWith('/api/')) {
+    return NextResponse.next();
+  }
 
   const session = request.cookies.get('admin_session')?.value;
-  if (session !== process.env.ADMIN_PASSWORD) {
+  if (session !== 'logged_in') {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
