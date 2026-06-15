@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { getSupabase } from '@/lib/supabase';
 
 export default async function TransactionsPage({
   searchParams,
@@ -10,6 +10,7 @@ export default async function TransactionsPage({
   const pageSize = 50;
   const from = (page - 1) * pageSize;
 
+  const supabase = getSupabase();
   const { data, count } = await supabase
     .from('transactions')
     .select('*', { count: 'exact' })

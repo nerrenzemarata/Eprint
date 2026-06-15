@@ -1,6 +1,7 @@
-import { supabase } from '@/lib/supabase';
+import { getSupabase } from '@/lib/supabase';
 
 async function getStats() {
+  const supabase = getSupabase();
   const today = new Date().toISOString().split('T')[0];
 
   const [totalRes, todayRes, txCountRes, subRes, deviceRes] = await Promise.all([

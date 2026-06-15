@@ -1,8 +1,9 @@
-import { supabase } from '@/lib/supabase';
+import { getSupabase } from '@/lib/supabase';
 import PricingForm from './PricingForm';
 import { updatePrice } from './actions';
 
 async function getPricing() {
+  const supabase = getSupabase();
   const { data } = await supabase
     .from('pricing')
     .select('paperSize,colorMode,pricePerPage,updatedAt')

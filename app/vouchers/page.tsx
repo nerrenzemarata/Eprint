@@ -1,6 +1,7 @@
-import { supabase } from '@/lib/supabase';
+import { getSupabase } from '@/lib/supabase';
 
 export default async function VouchersPage() {
+  const supabase = getSupabase();
   const { data } = await supabase
     .from('vouchers')
     .select('*')
