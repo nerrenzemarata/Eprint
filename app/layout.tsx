@@ -12,6 +12,7 @@ const navLinks = [
   { href: '/pricing',       label: 'Pricing',       icon: '₱' },
   { href: '/subscriptions', label: 'Subscriptions', icon: '★' },
   { href: '/vouchers',      label: 'Vouchers',      icon: '◈' },
+  { href: '/remote-print',  label: 'Remote Print',  icon: '⎙' },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
