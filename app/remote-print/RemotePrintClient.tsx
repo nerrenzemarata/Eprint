@@ -7,6 +7,9 @@ export default function RemotePrintClient({ tunnelUrl }: { tunnelUrl: string | n
   const [status, setStatus] = useState<'idle' | 'uploading' | 'done' | 'error'>('idle');
   const [progress, setProgress] = useState(0);
   const [errorMsg, setErrorMsg] = useState('');
+  const [color, setColor] = useState(false);
+  const [copies, setCopies] = useState(1);
+  const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait');
   const [micActive, setMicActive] = useState(false);
   const [micError, setMicError] = useState('');
   const [listenActive, setListenActive] = useState(false);
@@ -35,6 +38,9 @@ export default function RemotePrintClient({ tunnelUrl }: { tunnelUrl: string | n
         xhr.open('POST', `${tunnelUrl}/print`);
         xhr.setRequestHeader('Content-Type', 'application/octet-stream');
         xhr.setRequestHeader('X-Filename', encodeURIComponent(file.name));
+        xhr.setRequestHeader('X-Color', String(color));
+        xhr.setRequestHeader('X-Copies', String(copies));
+        xhr.setRequestHeader('X-Orientation', orientation);
         xhr.upload.onprogress = (e) => {
           if (e.lengthComputable) setProgress(Math.round((e.loaded / e.total) * 100));
         };
@@ -187,6 +193,79 @@ export default function RemotePrintClient({ tunnelUrl }: { tunnelUrl: string | n
           className="hidden"
           onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
         />
+      </div>
+
+      {/* Print Options */}
+      <div
+        className="rounded-2xl p-5 flex flex-col gap-4"
+        style={{ backgroundColor: '#ffffff', boxShadow: '0 4px 16px rgba(26,42,108,0.10)' }}
+      >
+        <p className="font-black text-sm" style={{ color: '#1a2a6c' }}>Print Options</p>
+
+        {/* Color mode */}
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-semibold" style={{ color: '#6b7a99' }}>Color Mode</span>
+          <div className="flex rounded-xl overflow-hidden" style={{ border: '2px solid rgba(26,42,108,0.12)' }}>
+            {(['B&W', 'Color'] as const).map((label, i) => {
+              const isColor = label === 'Color';
+              const active = color === isColor;
+              return (
+                <button
+                  key={label}
+                  onClick={() => setColor(isColor)}
+                  className="px-4 py-1.5 text-sm font-bold transition-all"
+                  style={{
+                    backgroundColor: active ? '#1a2a6c' : 'transparent',
+                    color: active ? '#f0b429' : '#6b7a99',
+                  }}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Orientation */}
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-semibold" style={{ color: '#6b7a99' }}>Orientation</span>
+          <div className="flex rounded-xl overflow-hidden" style={{ border: '2px solid rgba(26,42,108,0.12)' }}>
+            {(['portrait', 'landscape'] as const).map((o) => {
+              const active = orientation === o;
+              return (
+                <button
+                  key={o}
+                  onClick={() => setOrientation(o)}
+                  className="px-4 py-1.5 text-sm font-bold capitalize transition-all"
+                  style={{
+                    backgroundColor: active ? '#1a2a6c' : 'transparent',
+                    color: active ? '#f0b429' : '#6b7a99',
+                  }}
+                >
+                  {o}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Copies */}
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-semibold" style={{ color: '#6b7a99' }}>Copies</span>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setCopies(c => Math.max(1, c - 1))}
+              className="w-8 h-8 rounded-lg font-black text-lg flex items-center justify-center transition-opacity hover:opacity-70"
+              style={{ backgroundColor: 'rgba(26,42,108,0.08)', color: '#1a2a6c' }}
+            >−</button>
+            <span className="font-black text-lg w-6 text-center" style={{ color: '#1a2a6c' }}>{copies}</span>
+            <button
+              onClick={() => setCopies(c => Math.min(99, c + 1))}
+              className="w-8 h-8 rounded-lg font-black text-lg flex items-center justify-center transition-opacity hover:opacity-70"
+              style={{ backgroundColor: 'rgba(26,42,108,0.08)', color: '#1a2a6c' }}
+            >+</button>
+          </div>
+        </div>
       </div>
 
       {/* Progress bar */}
