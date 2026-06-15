@@ -1,4 +1,6 @@
 import { getSupabase } from '@/lib/supabase';
+
+export const dynamic = 'force-dynamic';
 import PricingForm from './PricingForm';
 import { updatePrice } from './actions';
 

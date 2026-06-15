@@ -1,5 +1,7 @@
 import { getSupabase } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 export default async function VouchersPage() {
   const supabase = getSupabase();
   const { data } = await supabase

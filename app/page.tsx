@@ -1,5 +1,7 @@
 import { getSupabase } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 async function getStats() {
   const supabase = getSupabase();
   const today = new Date().toISOString().split('T')[0];
