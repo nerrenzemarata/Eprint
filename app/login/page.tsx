@@ -6,25 +6,30 @@ import { useRouter } from 'next/navigation';
 export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password }),
-    });
-    if (res.ok) {
-      router.push('/');
-    } else {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
       const data = await res.json();
-      if (data.error === 'Not set up') {
-        router.push('/setup');
+      if (res.ok) {
+        router.push('/');
+        router.refresh();
       } else {
-        setError('Wrong password.');
+        setError(data.error ?? 'Login failed.');
       }
+    } catch (err) {
+      setError('Network error. Try again.');
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -42,12 +47,13 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
-        {error && <p className="text-red-400 text-xs">{error}</p>}
+        {error && <p className="text-red-400 text-xs break-all">{error}</p>}
         <button
           type="submit"
-          className="bg-blue-700 hover:bg-blue-600 rounded-lg py-2 text-sm font-semibold transition-colors"
+          disabled={loading}
+          className="bg-blue-700 hover:bg-blue-600 disabled:opacity-50 rounded-lg py-2 text-sm font-semibold transition-colors"
         >
-          Login
+          {loading ? 'Logging in...' : 'Login'}
         </button>
         <p className="text-center text-xs text-gray-600">
           First time?{' '}

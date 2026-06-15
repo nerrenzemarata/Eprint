@@ -17,10 +17,12 @@ export default async function PricingPage() {
   const pricing = await getPricing();
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-2">Pricing</h1>
-      <p className="text-gray-500 text-sm mb-8">
-        Changes are picked up by the tablet automatically on next startup or within 5 minutes.
-      </p>
+      <div className="mb-8">
+        <h1 className="text-3xl font-black" style={{ color: '#1a2a6c' }}>Pricing</h1>
+        <p className="text-sm mt-1" style={{ color: '#6b7a99' }}>
+          Changes are picked up by the tablet automatically on next startup or within 5 minutes.
+        </p>
+      </div>
       <PricingForm pricing={pricing} updatePrice={updatePrice} />
     </div>
   );

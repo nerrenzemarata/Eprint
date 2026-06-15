@@ -7,42 +7,72 @@ export const metadata: Metadata = {
 };
 
 const navLinks = [
-  { href: '/',               label: 'Dashboard' },
-  { href: '/transactions',   label: 'Transactions' },
-  { href: '/pricing',        label: 'Pricing' },
-  { href: '/subscriptions',  label: 'Subscriptions' },
-  { href: '/vouchers',       label: 'Vouchers' },
+  { href: '/',              label: 'Dashboard',     icon: '▦' },
+  { href: '/transactions',  label: 'Transactions',  icon: '⇄' },
+  { href: '/pricing',       label: 'Pricing',       icon: '₱' },
+  { href: '/subscriptions', label: 'Subscriptions', icon: '★' },
+  { href: '/vouchers',      label: 'Vouchers',      icon: '◈' },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-gray-950 text-gray-100 flex">
-        <aside className="w-52 shrink-0 bg-gray-900 border-r border-gray-800 flex flex-col py-8 px-4 gap-2">
-          <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-4 px-2">
-            EPrint Admin
-          </p>
+      <body className="min-h-screen flex" style={{ backgroundColor: '#e8eaf0', color: '#1a2a6c' }}>
+
+        {/* Sidebar */}
+        <aside
+          className="w-56 shrink-0 flex flex-col py-8 px-4 gap-1"
+          style={{ backgroundColor: '#1a2a6c' }}
+        >
+          {/* Logo */}
+          <div className="px-3 mb-8">
+            <div className="flex items-center gap-2 mb-1">
+              <span
+                className="text-xl font-black tracking-tight"
+                style={{ color: '#f0b429' }}
+              >
+                E
+              </span>
+              <span className="text-xl font-black text-white tracking-tight">Print</span>
+            </div>
+            <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.4)' }}>
+              Admin Panel
+            </p>
+          </div>
+
+          {/* Nav Links */}
           {navLinks.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className="px-3 py-2 rounded-lg text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all"
+              style={{ color: 'rgba(255,255,255,0.75)' }}
             >
+              <span style={{ color: '#f0b429', fontSize: 13 }}>{l.icon}</span>
               {l.label}
             </Link>
           ))}
+
+          {/* Logout */}
           <div className="mt-auto">
             <form action="/api/logout" method="POST">
               <button
                 type="submit"
-                className="w-full px-3 py-2 rounded-lg text-sm text-gray-500 hover:text-red-400 hover:bg-gray-800 text-left transition-colors"
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all text-left"
+                style={{ color: 'rgba(255,255,255,0.4)' }}
               >
+                <span style={{ fontSize: 13 }}>⎋</span>
                 Logout
               </button>
             </form>
           </div>
         </aside>
-        <main className="flex-1 p-8 overflow-auto">{children}</main>
+
+        {/* Main */}
+        <main className="flex-1 p-8 overflow-auto">
+          {children}
+        </main>
+
       </body>
     </html>
   );

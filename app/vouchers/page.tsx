@@ -15,44 +15,78 @@ export default async function VouchersPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-2">Vouchers</h1>
-      <div className="flex gap-4 mb-6 text-sm text-gray-400">
-        <span className="text-green-400 font-medium">{active} active</span>
-        <span>·</span>
-        <span>{used} used</span>
-        <span>·</span>
-        <span>{rows.length} total</span>
+      <div className="mb-8">
+        <h1 className="text-3xl font-black" style={{ color: '#1a2a6c' }}>Vouchers</h1>
+        <div className="flex gap-4 mt-2 text-sm font-semibold">
+          <span
+            className="px-2.5 py-1 rounded-full text-xs font-bold"
+            style={{ backgroundColor: 'rgba(34,197,94,0.12)', color: '#22c55e' }}
+          >
+            {active} active
+          </span>
+          <span
+            className="px-2.5 py-1 rounded-full text-xs font-bold"
+            style={{ backgroundColor: 'rgba(107,122,153,0.12)', color: '#6b7a99' }}
+          >
+            {used} used
+          </span>
+          <span
+            className="px-2.5 py-1 rounded-full text-xs font-bold"
+            style={{ backgroundColor: 'rgba(26,42,108,0.08)', color: '#1a2a6c' }}
+          >
+            {rows.length} total
+          </span>
+        </div>
       </div>
-      <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+
+      <div
+        className="rounded-2xl overflow-hidden"
+        style={{ backgroundColor: '#ffffff', boxShadow: '0 4px 16px rgba(26,42,108,0.10)' }}
+      >
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-800 text-gray-500 text-xs uppercase tracking-widest">
-              <th className="px-4 py-3 text-left">Code</th>
-              <th className="px-4 py-3 text-right">Amount</th>
-              <th className="px-4 py-3 text-left">Status</th>
-              <th className="px-4 py-3 text-left">Created</th>
-              <th className="px-4 py-3 text-left">Tablet</th>
+            <tr style={{ backgroundColor: '#1a2a6c' }}>
+              {['Code', 'Amount', 'Status', 'Created', 'Tablet'].map((h, i) => (
+                <th
+                  key={h}
+                  className={`px-4 py-3 text-xs font-bold uppercase tracking-widest ${h === 'Amount' ? 'text-right' : 'text-left'}`}
+                  style={{ color: i === 0 ? '#f0b429' : 'rgba(255,255,255,0.6)' }}
+                >
+                  {h}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {rows.map((v) => (
-              <tr key={v.code} className="border-b border-gray-800 last:border-0 hover:bg-gray-800/50">
-                <td className="px-4 py-3 font-mono">{v.code}</td>
-                <td className="px-4 py-3 text-right">₱{Number(v.amount).toFixed(2)}</td>
+            {rows.map((v, i) => (
+              <tr
+                key={v.code}
+                style={{ borderBottom: i < rows.length - 1 ? '1px solid rgba(26,42,108,0.08)' : 'none' }}
+              >
+                <td className="px-4 py-3 font-mono font-bold" style={{ color: '#1a2a6c' }}>{v.code}</td>
+                <td className="px-4 py-3 text-right font-black" style={{ color: '#1a2a6c' }}>
+                  ₱{Number(v.amount).toFixed(2)}
+                </td>
                 <td className="px-4 py-3">
-                  <span className={`text-xs font-medium ${v.status === 'active' ? 'text-green-400' : 'text-gray-500'}`}>
+                  <span
+                    className="text-xs font-bold px-2.5 py-1 rounded-full"
+                    style={{
+                      backgroundColor: v.status === 'active' ? 'rgba(34,197,94,0.12)' : 'rgba(107,122,153,0.12)',
+                      color: v.status === 'active' ? '#22c55e' : '#6b7a99',
+                    }}
+                  >
                     {v.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">
+                <td className="px-4 py-3 text-xs whitespace-nowrap" style={{ color: '#6b7a99' }}>
                   {new Date(v.createdAt).toLocaleDateString()}
                 </td>
-                <td className="px-4 py-3 font-mono text-xs text-gray-500">{v.tablet_id}</td>
+                <td className="px-4 py-3 font-mono text-xs" style={{ color: '#6b7a99' }}>{v.tablet_id}</td>
               </tr>
             ))}
             {rows.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-4 py-10 text-center text-gray-600">
+                <td colSpan={5} className="px-4 py-12 text-center text-sm" style={{ color: '#6b7a99' }}>
                   No vouchers yet.
                 </td>
               </tr>
