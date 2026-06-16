@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getSupabase } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
@@ -11,7 +12,7 @@ async function getStats() {
     supabase.from('transactions').select('totalAmount').eq('paymentStatus', 'completed').gte('timestamp', today),
     supabase.from('transactions').select('id', { count: 'exact', head: true }),
     supabase.from('subscriptions').select('id', { count: 'exact', head: true }).eq('status', 'active'),
-    supabase.from('devices').select('id,lastSeen,local_ip,tunnel_url').order('lastSeen', { ascending: false }).limit(5),
+    supabase.from('devices').select('id,lastSeen,local_ip,tunnel_url').order('lastSeen', { ascending: false }).limit(100),
   ]);
 
   const totalRevenue = (totalRes.data ?? []).reduce((s, r) => s + Number(r.totalAmount), 0);
@@ -86,6 +87,7 @@ export default async function DashboardPage() {
               <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.6)' }}>Last Seen</th>
               <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.6)' }}>Status</th>
               <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.6)' }}>Remote Access</th>
+              <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.6)' }}></th>
             </tr>
           </thead>
           <tbody>
@@ -143,12 +145,21 @@ export default async function DashboardPage() {
                       <span className="text-xs" style={{ color: '#6b7a99' }}>—</span>
                     )}
                   </td>
+                  <td className="px-6 py-4">
+                    <Link
+                      href={`/devices/${d.id}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-opacity hover:opacity-80"
+                      style={{ backgroundColor: '#1a2a6c', color: '#f0b429', border: '1.5px solid rgba(240,180,41,0.4)' }}
+                    >
+                      Manage →
+                    </Link>
+                  </td>
                 </tr>
               );
             })}
             {stats.devices.length === 0 && (
               <tr>
-                <td colSpan={4} className="px-6 py-12 text-center text-sm" style={{ color: '#6b7a99' }}>
+                <td colSpan={5} className="px-6 py-12 text-center text-sm" style={{ color: '#6b7a99' }}>
                   No devices have synced yet.
                 </td>
               </tr>

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getSupabase } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
@@ -81,7 +82,18 @@ export default async function VouchersPage() {
                 <td className="px-4 py-3 text-xs whitespace-nowrap" style={{ color: '#6b7a99' }}>
                   {new Date(v.createdAt).toLocaleDateString()}
                 </td>
-                <td className="px-4 py-3 font-mono text-xs" style={{ color: '#6b7a99' }}>{v.tablet_id}</td>
+                <td className="px-4 py-3">
+                  {v.tablet_id ? (
+                    <Link
+                      href={`/devices/${v.tablet_id}`}
+                      className="inline-block font-mono text-xs px-2 py-1 rounded-lg hover:opacity-80 transition-opacity max-w-[120px] truncate"
+                      style={{ backgroundColor: 'rgba(26,42,108,0.08)', color: '#1a2a6c' }}
+                      title={v.tablet_id}
+                    >
+                      {v.tablet_id.slice(0, 8)}…
+                    </Link>
+                  ) : <span style={{ color: '#6b7a99' }}>—</span>}
+                </td>
               </tr>
             ))}
             {rows.length === 0 && (
